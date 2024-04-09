@@ -1,5 +1,6 @@
 package br.com.alura.service
 
+import br.com.alura.dto.AtualizacaoTopicoForm
 import br.com.alura.dto.NovoTopicoForm
 import br.com.alura.dto.TopicoView
 import br.com.alura.mapper.TopicoFormMapper
@@ -15,13 +16,18 @@ class TopicoService(
     private val topicoFormMapper: TopicoFormMapper
 ) {
 
+    // val é read-only, ou seja, não pode ser alterado igual um final em JAVA
+    // var pode ser alterado
+
     fun listar(): List<TopicoView> {
+        //mapeamos a lista de topicos para uma lista de TopicoView
         return topicos.stream().map {
             t -> topicoViewMapper.map(t)
         }.collect(Collectors.toList())
     }
 
     fun buscarPorId(id: Long): TopicoView {
+        //filtramos o tópico da lista de topicos cadastrada anteriormente
         val topico = topicos.stream().filter { t ->
             t.id == id
         }.findFirst().get()
@@ -31,13 +37,33 @@ class TopicoService(
 
     fun cadastrar(form: NovoTopicoForm) {
 
+        //criamos um novo tópico com os dados vindos do Form
         val topico = topicoFormMapper.map(form)
-        topico.id = topicos.size.toLong() + 1
-        topicos = topicos.plus(topico)
+        topico.id = topicos.size.toLong() + 1 //geramos um id para o tópico automaticamente
+        topicos = topicos.plus(topico) //adicionamos o tópico na lista de topicos
 
     }
 
-    // val é read-only, ou seja, não pode ser alterado igual um final em JAVA
-    // var pode ser alterado
+    fun atualizar(form: AtualizacaoTopicoForm) {
+        //filtramos o tópico da lista de topicos cadastrada anteriormente
+        val topico = topicos.stream().filter { t ->
+            t.id == form.id
+        }.findFirst().get()
+
+        //removemos o tópico pesquisado da lista de topicos e incluimos ele novamente com os dados atualizados vindos do Form
+        topicos = topicos.minus(topico).plus(Topico(
+            id = form.id,
+            titulo = form.titulo,
+            mensagem = form.mensagem,
+            autor = topico.autor,
+            curso = topico.curso,
+            respostas = topico.respostas,
+            status = topico.status,
+            dataCriacao = topico.dataCriacao
+        ))
+
+    }
+
+
 
 }
