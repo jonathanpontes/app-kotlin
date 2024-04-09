@@ -35,23 +35,23 @@ class TopicoService(
         return topicoViewMapper.map(topico)
     }
 
-    fun cadastrar(form: NovoTopicoForm) {
+    fun cadastrar(form: NovoTopicoForm): TopicoView {
 
         //criamos um novo tópico com os dados vindos do Form
-        val topico = topicoFormMapper.map(form)
+        val topico = topicoFormMapper.map(form) //mapeamos o form para Topico
         topico.id = topicos.size.toLong() + 1 //geramos um id para o tópico automaticamente
         topicos = topicos.plus(topico) //adicionamos o tópico na lista de topicos
-
+        return topicoViewMapper.map(topico) //retornamos o tópico mapeado para TopicoView
     }
 
-    fun atualizar(form: AtualizacaoTopicoForm) {
+    fun atualizar(form: AtualizacaoTopicoForm): TopicoView {
         //filtramos o tópico da lista de topicos cadastrada anteriormente
         val topico = topicos.stream().filter { t ->
             t.id == form.id
         }.findFirst().get()
 
         //removemos o tópico pesquisado da lista de topicos e incluimos ele novamente com os dados atualizados vindos do Form
-        topicos = topicos.minus(topico).plus(Topico(
+        val topicoAtualizado = Topico(
             id = form.id,
             titulo = form.titulo,
             mensagem = form.mensagem,
@@ -60,7 +60,10 @@ class TopicoService(
             respostas = topico.respostas,
             status = topico.status,
             dataCriacao = topico.dataCriacao
-        ))
+        )
+        topicos = topicos.minus(topico).plus(topicoAtualizado) //removemos o tópico antigo e adicionamos o tópico atualizado
+
+        return topicoViewMapper.map(topicoAtualizado) //retornamos o tópico mapeado para TopicoView
 
     }
 
