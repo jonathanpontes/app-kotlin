@@ -64,6 +64,16 @@ class TopicoService(
 
     }
 
+    fun deletar(id: Long) {
+        //filtramos o tópico da lista de topicos cadastrada anteriormente
+        val topico = topicos.stream().filter { t ->
+            t.id == id
+        }.findFirst().get()
+
+        //removemos o tópico da lista de topicos
+        topicos = topicos.minus(topico)
+
+    }
 
 
 }
