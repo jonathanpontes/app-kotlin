@@ -1,8 +1,7 @@
-package br.com.alura.mapper
+package br.com.alura.br.com.alura.forum.mapper
 
-import br.com.alura.br.com.alura.mapper.Mapper
-import br.com.alura.dto.TopicoView
-import br.com.alura.model.Topico
+import br.com.alura.br.com.alura.forum.dto.TopicoView
+import br.com.alura.br.com.alura.forum.model.Topico
 import org.springframework.stereotype.Component
 
 @Component

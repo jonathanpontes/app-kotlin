@@ -1,4 +1,4 @@
-package br.com.alura.utils
+package br.com.alura.br.com.alura.forum.utils
 
 import org.apache.hadoop.conf.Configuration
 import org.apache.parquet.hadoop.api.ReadSupport

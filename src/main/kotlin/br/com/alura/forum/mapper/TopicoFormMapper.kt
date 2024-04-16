@@ -1,10 +1,9 @@
-package br.com.alura.mapper
+package br.com.alura.br.com.alura.forum.mapper
 
-import br.com.alura.br.com.alura.mapper.Mapper
-import br.com.alura.dto.NovoTopicoForm
-import br.com.alura.model.Topico
-import br.com.alura.service.CursoService
-import br.com.alura.service.UsuarioService
+import br.com.alura.br.com.alura.forum.dto.NovoTopicoForm
+import br.com.alura.br.com.alura.forum.model.Topico
+import br.com.alura.br.com.alura.forum.service.CursoService
+import br.com.alura.br.com.alura.forum.service.UsuarioService
 import org.springframework.stereotype.Component
 
 @Component

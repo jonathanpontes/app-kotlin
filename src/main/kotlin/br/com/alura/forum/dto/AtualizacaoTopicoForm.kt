@@ -1,4 +1,4 @@
-package br.com.alura.dto
+package br.com.alura.br.com.alura.forum.dto
 
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.NotNull

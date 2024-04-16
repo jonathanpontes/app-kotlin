@@ -1,6 +1,6 @@
-package br.com.alura.service
+package br.com.alura.br.com.alura.forum.service
 
-import br.com.alura.model.Usuario
+import br.com.alura.br.com.alura.forum.model.Usuario
 import org.springframework.stereotype.Service
 
 @Service

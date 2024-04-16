@@ -1,4 +1,4 @@
-package br.com.alura.br.com.alura.mapper
+package br.com.alura.br.com.alura.forum.mapper
 
 interface Mapper<T, U> {
 

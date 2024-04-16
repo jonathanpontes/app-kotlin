@@ -1,11 +1,12 @@
-package br.com.alura.service
+package br.com.alura.br.com.alura.forum.service
 
-import br.com.alura.dto.AtualizacaoTopicoForm
-import br.com.alura.dto.NovoTopicoForm
-import br.com.alura.dto.TopicoView
-import br.com.alura.mapper.TopicoFormMapper
-import br.com.alura.mapper.TopicoViewMapper
-import br.com.alura.model.Topico
+import br.com.alura.br.com.alura.forum.dto.AtualizacaoTopicoForm
+import br.com.alura.br.com.alura.forum.dto.NovoTopicoForm
+import br.com.alura.br.com.alura.forum.dto.TopicoView
+import br.com.alura.br.com.alura.forum.exception.NotFoundException
+import br.com.alura.br.com.alura.forum.mapper.TopicoFormMapper
+import br.com.alura.br.com.alura.forum.mapper.TopicoViewMapper
+import br.com.alura.br.com.alura.forum.model.Topico
 import org.springframework.stereotype.Service
 import java.util.stream.Collectors
 
@@ -13,7 +14,8 @@ import java.util.stream.Collectors
 class TopicoService(
     private var topicos: List<Topico> = ArrayList(),
     private val topicoViewMapper: TopicoViewMapper,
-    private val topicoFormMapper: TopicoFormMapper
+    private val topicoFormMapper: TopicoFormMapper,
+    private val notFoundMessage: String = "Topico não encontrado!"
 ) {
 
     // val é read-only, ou seja, não pode ser alterado igual um final em JAVA
@@ -21,8 +23,8 @@ class TopicoService(
 
     fun listar(): List<TopicoView> {
         //mapeamos a lista de topicos para uma lista de TopicoView
-        return topicos.stream().map {
-            t -> topicoViewMapper.map(t)
+        return topicos.stream().map { t ->
+            topicoViewMapper.map(t)
         }.collect(Collectors.toList())
     }
 
@@ -30,7 +32,7 @@ class TopicoService(
         //filtramos o tópico da lista de topicos cadastrada anteriormente
         val topico = topicos.stream().filter { t ->
             t.id == id
-        }.findFirst().get()
+        }.findFirst().orElseThrow { NotFoundException(notFoundMessage) }
 
         return topicoViewMapper.map(topico)
     }
@@ -48,7 +50,7 @@ class TopicoService(
         //filtramos o tópico da lista de topicos cadastrada anteriormente
         val topico = topicos.stream().filter { t ->
             t.id == form.id
-        }.findFirst().get()
+        }.findFirst().orElseThrow { NotFoundException(notFoundMessage) }
 
         //removemos o tópico pesquisado da lista de topicos e incluimos ele novamente com os dados atualizados vindos do Form
         val topicoAtualizado = Topico(
@@ -61,7 +63,8 @@ class TopicoService(
             status = topico.status,
             dataCriacao = topico.dataCriacao
         )
-        topicos = topicos.minus(topico).plus(topicoAtualizado) //removemos o tópico antigo e adicionamos o tópico atualizado
+        topicos =
+            topicos.minus(topico).plus(topicoAtualizado) //removemos o tópico antigo e adicionamos o tópico atualizado
 
         return topicoViewMapper.map(topicoAtualizado) //retornamos o tópico mapeado para TopicoView
 
@@ -69,9 +72,11 @@ class TopicoService(
 
     fun deletar(id: Long) {
         //filtramos o tópico da lista de topicos cadastrada anteriormente
-        val topico = topicos.stream().filter { t ->
-            t.id == id
-        }.findFirst().get()
+
+        val topico = topicos.stream().filter {
+            t -> t.id == id
+        }.findFirst().orElseThrow { NotFoundException(notFoundMessage) }
+        //}.findFirst().get()
 
         //removemos o tópico da lista de topicos
         topicos = topicos.minus(topico)
